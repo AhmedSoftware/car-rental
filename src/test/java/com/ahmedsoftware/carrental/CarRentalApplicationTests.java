@@ -18,11 +18,22 @@ class CarRentalApplicationTests {
     public void test_should_return_all_frauds(){
      
 	    String json = "[\"ahmed\",\"ali\"]";
-        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/frauds")).willReturn(WireMock.aResponse().withBody(json).withStatus(200)));
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/fraud")).willReturn(WireMock.aResponse().withBody(json).withStatus(201)));
         
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> entity = restTemplate.getForEntity("http://localhost:8081/frauds", String.class);
-        BDDAssertions.then(entity.getStatusCode().value()).isEqualTo(200);
+        ResponseEntity<String> entity = restTemplate.getForEntity("http://localhost:8081/fraud", String.class);
+        BDDAssertions.then(entity.getStatusCode().value()).isEqualTo(201);
+        BDDAssertions.then(entity.getBody()).isEqualTo(json);
+        
+    }
+    
+    @Test
+    public void test_should_return_all_frauds_integration(){
+        
+        String json = "[\"ahmed\",\"ali\"]";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> entity = restTemplate.getForEntity("http://localhost:8082/fraud", String.class);
+        BDDAssertions.then(entity.getStatusCode().value()).isEqualTo(201);
         BDDAssertions.then(entity.getBody()).isEqualTo(json);
         
     }
